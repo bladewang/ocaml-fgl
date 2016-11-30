@@ -8,7 +8,7 @@ type context        = (adjacency_list * node_index * node_name * adjacency_list)
 
 type graph          = Empty | Graph of (context * graph)
 
-(* Function to represent an adjancecy list as a string *)
+(* Function to represent an adjacency list as a string *)
 let rec string_of_adj_list: adjacency_list -> string =
   fun a -> match a with 
              | [] -> ""
