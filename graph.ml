@@ -46,6 +46,12 @@ let rec gmap: (context -> context) -> graph -> graph =
                | Empty -> Empty
                | Graph(c, g') -> Graph(f c, gmap f g')
 
+(* Unordered Fold Function for graphs *)
+let rec ufold: (context -> string -> string) -> string -> graph -> string =
+  fun f z g -> match g with
+                 | Empty -> z
+                 | Graph(c, g') -> f c (ufold f z g')
+
 (* Function to swap in-going and out-going adjacency lists for a graph *)
 let swap: context -> context =
   fun c -> match c with
