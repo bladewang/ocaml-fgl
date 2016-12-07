@@ -53,7 +53,7 @@ let rec ufold: (context -> 'tau -> 'tau) -> 'tau -> graph -> 'tau =
 
 let rec fold: context -> int -> int = 
   fun ctx acc -> match ctx with
-                |(a, idx, name, b) -> idx + acc 
+                   |(a, idx, name, b) -> idx + acc 
 
 (* Function to swap in-going and out-going adjacency lists for a graph *)
 let swap: context -> context =
