@@ -82,7 +82,31 @@ let print_gmatch: (context * graph) option -> string =
   fun m -> match m with 
              | None -> "no match found"
              | Some(ctx, g') -> string_of_context ctx
-  
+
+(* Function to return second elements from tuples *)
+let rec second: (edge_label * node_index) list -> node_index list = 
+  fun l -> match l with
+             | [] -> []
+	     | (label, idx)::tail -> 
+		  let rest = second tail in
+                  idx::rest
+
+(* Function to find the successor of a node *)
+let rec gsuc: node_index -> graph -> node_index list = 
+  fun n g -> match (gmatch n g) with
+               | Some((_, _, _, s), _) -> second s
+
+(* Function to convert node_index list to string *)
+let rec string_of_node_index: (node_index) list -> string = 
+  fun l -> match l with 
+             | [] -> "no sucessors"
+             | n::tail ->
+ 	         match tail with
+                   | [] -> (string_of_int n)
+                   | _ -> 
+                       let rest = string_of_node_index tail in
+                       (string_of_int n) ^ "," ^ rest
+
 (* Example Usage *)
 let example_print =
   let g = Graph(([("left", 2);("up", 3)], 3, "c", [("right", 2)]), Graph(([("right", 1)], 2, "b", [("left", 1)]), Graph(([], 1, "a", []), Empty))) in
@@ -93,4 +117,7 @@ let example_print =
   print_string ("Graph Map: " ^ string_of_graph (gmap map g) ^ "\n");
   print_string ("Graph Fold: " ^ string_of_int (ufold fold 0 g) ^ "\n");
   print_string ("Graph Reverse: " ^ string_of_graph (grev g) ^ "\n");
-  print_string ("Graph Match: " ^ print_gmatch (gmatch 3 g) ^ "\n") 
+  print_string ("Graph Match: " ^ print_gmatch (gmatch 3 g) ^ "\n");
+
+  let string_of_suc = gsuc 3 (grev g) in
+  print_string ("Graph Sucessors: " ^ string_of_node_index string_of_suc ^ "\n")
